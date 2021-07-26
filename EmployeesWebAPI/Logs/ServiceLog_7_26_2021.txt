@@ -1,0 +1,3 @@
+7/26/2021 9:58:10 PM : ExecuteReader requires an open and available Connection. The connection's current state is closed.
+7/26/2021 9:59:33 PM : Could not find stored procedure 'sp_GetEmployees'.
+7/26/2021 10:04:41 PM : Specified cast is not valid.
