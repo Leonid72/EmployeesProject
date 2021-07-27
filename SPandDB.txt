@@ -1,0 +1,20 @@
+
+  alter procedure sp_GetEmployees  Mark
+  @FirstName nvarchar(20) = null,
+  @LastName nvarchar(20) = null
+  as
+  Declare @Sql nvarchar(max)
+  Declare @Where nvarchar(max)
+
+  set @Sql = 'select ID,FirstName,LastName,Gender,Salary from Employees'
+  set @Where = ' Where 1=1 '
+
+  if @FirstName is not null
+   set @Where = @Where + ' and FirstName = @FN'
+   
+  if @LastName is not null
+   set @Where = @Where + ' and LastName = @LN'
+   set @Sql = @Sql + @Where
+   Print @Sql
+   Execute sp_executesql @Sql,N'@FN nvarchar(20),@LN nvarchar(20)',@FN = @FirstName,@LN = @LastName
+  go
