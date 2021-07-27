@@ -8,6 +8,8 @@ using System.Net.Http;
 using System.Web;
 using System.Web.Mvc;
 using EmployeeWebClient.ModelBinders;
+using System.Text;
+
 namespace EmployeeWebClient.Controllers
 {
     public class TestController : Controller
@@ -41,6 +43,15 @@ namespace EmployeeWebClient.Controllers
         [HttpPost]
         public ActionResult AddEmployee([ModelBinder(typeof(ModelBinders.EmployeeBinder))] Employee emp)
         {
+            if (emp != null)
+            {
+                HttpResponseMessage httpResponse = httpClient.PostAsJsonAsync(httpClient.BaseAddress +"/Employee",emp).Result;
+                if(httpResponse.IsSuccessStatusCode)
+                {
+                    var data = httpResponse.Content.ReadAsStringAsync().Result;
+                    empVM.employees = JsonConvert.DeserializeObject<List<Employee>>(data);
+                }
+            }
             return View("Test", empVM);
         }
     }

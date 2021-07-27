@@ -18,3 +18,39 @@
    Print @Sql
    Execute sp_executesql @Sql,N'@FN nvarchar(20),@LN nvarchar(20)',@FN = @FirstName,@LN = @LastName
   go
+
+
+
+
+CREATE PROCEDURE AddNewEmployee
+(
+@FirstName nvarchar(20)=null,
+@LastName nvarchar(20) = null,
+@Gender nvarchar(20)=null,
+@Salary nvarchar(MAX)=null,
+@Msg nvarchar(MAX)=null OUTPUT
+)
+AS
+BEGIN TRY
+
+    INSERT INTO Employees
+    VALUES
+    (
+    @FirstName ,
+    @LastName,
+    @Gender,
+    @Salary,
+    GETDATE()
+
+    )
+
+    SET @Msg='Table Detail Saved Successfully.'
+
+END TRY
+BEGIN CATCH
+
+    SET @Msg=ERROR_MESSAGE()
+
+END CATCH
+
+GO
