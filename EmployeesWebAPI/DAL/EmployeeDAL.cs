@@ -107,5 +107,53 @@ namespace EmployeesWebAPI.DAL
 			}
 			return employees;
 		}
+
+
+		public int AddNewEmployee(Employee emp)
+		{
+			int result = 0;
+			List<Employee> employees = new List<Employee>();
+			try
+			{
+				
+				using (con = new SqlConnection(conString))
+				{
+					con.Open();
+					com = new SqlCommand("AddNewEmployee", con);
+					com.CommandType = CommandType.StoredProcedure;
+					if (!String.IsNullOrEmpty(emp.FirstName))
+					{
+						com.Parameters.Add("@FirstName", SqlDbType.NVarChar).Value = emp.FirstName;
+					}
+					if (!String.IsNullOrEmpty(emp.LastName))
+					{
+						com.Parameters.Add("@LastName", SqlDbType.NVarChar).Value = emp.LastName;
+					}
+					if (!String.IsNullOrEmpty(emp.Gender))
+					{
+						com.Parameters.Add("@Gender", SqlDbType.NVarChar).Value = emp.Gender;
+					}
+					if (emp.Salary > 0)
+					{
+						com.Parameters.Add("@Salary", SqlDbType.NVarChar).Value = emp.Salary;
+					}
+					result = com.ExecuteNonQuery();				
+					con.Close();
+				}
+			}
+			catch (Exception ex)
+			{
+				log.WriteToFile(ex.Message);
+
+			}
+			finally
+			{
+				if (con.State == ConnectionState.Open)
+				{
+					con.Close();
+				}
+			}
+			return result;
+		}
 	}
 }
