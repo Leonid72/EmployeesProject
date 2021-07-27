@@ -61,5 +61,51 @@ namespace EmployeesWebAPI.DAL
 			}
 			return employees;
 		}
+
+		public List<Employee> GetEmployeesByParams(string pFirstName)
+		{
+			List<Employee> employees = new List<Employee>();
+			try
+			{
+				using (con = new SqlConnection(conString))
+				{
+					con.Open();
+					com = new SqlCommand("sp_GetEmployees", con);
+					com.CommandType = CommandType.StoredProcedure;
+                    if (!String.IsNullOrEmpty(pFirstName))
+                    {
+						com.Parameters.Add("@FirstName", SqlDbType.NVarChar).Value = pFirstName;
+					}					
+					using (SqlDataReader reader = com.ExecuteReader())
+					{
+						Employee emp;
+						while (reader.Read())
+						{
+							emp = new Employee();
+							emp.ID = reader.GetInt32(0);
+							emp.FirstName = reader.GetString(1);
+							emp.LastName = reader.GetString(2);
+							emp.Gender = reader.GetString(3);
+							emp.Salary = reader.GetInt32(4);
+							employees.Add(emp);
+						}
+					}
+					con.Close();
+				}
+			}
+			catch (Exception ex)
+			{
+				log.WriteToFile(ex.Message);
+
+			}
+			finally
+			{
+				if (con.State == ConnectionState.Open)
+				{
+					con.Close();
+				}
+			}
+			return employees;
+		}
 	}
 }

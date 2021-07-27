@@ -18,5 +18,14 @@ namespace EmployeesWebAPI.Controllers
             employees = empDal.GetEmployees();
             return Json(employees);
         }
+
+
+        public IHttpActionResult Get(string FirstName)
+        {
+            List<Employee> employees = new List<Employee>();
+            EmployeeDAL empDal = new EmployeeDAL();
+            employees = empDal.GetEmployeesByParams(FirstName);
+            return Json(employees);
+        }
     }
 }
