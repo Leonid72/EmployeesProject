@@ -1,0 +1,63 @@
+﻿@model EmployeeWebClient.ViewModels.EmployeeVM
+@using EmployeeWebClient.Models
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Test</title>
+</head>
+<body>
+
+    <div>
+        @using (Html.BeginForm("AddEmployee","Test",FormMethod.Post))
+        {
+        <table>
+            <tr>
+                <td>First Name</td>
+                <td>@Html.TextBoxFor(m => m.employee.FirstName)</td>
+            </tr>
+            <tr>
+                <td>Last Name</td>
+                <td>@Html.TextBoxFor(m => m.employee.LastName)</td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="submit" id="AddEmployeeID" value="Add Employee" />
+                </td>
+            </tr>
+        </table>
+        }
+    </div>
+
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Gender</th>
+                    <th>Salary</th>
+                </tr>
+            </thead>
+            @foreach (Employee item in Model.employees)
+            {
+                <tr>
+                    <td>@item.ID</td>
+                    <td>@item.FirstName</td>
+                    <td>@item.LastName</td>
+                    <td>@item.Gender</td>
+                    <td>@item.Salary</td>
+
+                </tr>
+            }
+
+        </table>
+    </div>
+</body>
+</html>
