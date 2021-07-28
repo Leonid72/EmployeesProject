@@ -42,6 +42,7 @@ namespace EmployeeWebClient.Controllers
 
         [HttpPost]
         public ActionResult AddEmployee([ModelBinder(typeof(ModelBinders.EmployeeBinder))] Employee emp)
+        //public ActionResult AddEmployee(Employee emp)
         {
             if (emp != null)
             {

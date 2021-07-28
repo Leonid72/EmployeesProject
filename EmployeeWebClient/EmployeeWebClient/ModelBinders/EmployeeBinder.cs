@@ -15,7 +15,7 @@ namespace EmployeeWebClient.ModelBinders
             string empFirstName = objContext.Request.Form["employee.FirstName"];
             string empLastName = objContext.Request.Form["employee.LastName"];
             string empGender = objContext.Request.Form["employee.Gender"];
-            int empSalary= Convert.ToInt32( objContext.Request.Form["employee.Salary"]);
+            int empSalary= Convert.ToInt32(objContext.Request.Form["employee.Salary"]);
 
             Employee emp = new Employee();
             emp.FirstName = empFirstName;

@@ -86,7 +86,7 @@ namespace EmployeesWebAPI.DAL
 							emp.FirstName = reader.GetString(1);
 							emp.LastName = reader.GetString(2);
 							emp.Gender = reader.GetString(3);
-							emp.Salary = reader.GetInt32(4);
+							emp.Salary = reader.GetInt32(4);				
 							employees.Add(emp);
 						}
 					}
