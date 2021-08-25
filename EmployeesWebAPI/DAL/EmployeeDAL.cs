@@ -72,10 +72,11 @@ namespace EmployeesWebAPI.DAL
 					con.Open();
 					com = new SqlCommand("sp_GetEmployees", con);
 					com.CommandType = CommandType.StoredProcedure;
-                    if (!String.IsNullOrEmpty(pFirstName))
-                    {
+					if (!String.IsNullOrEmpty(pFirstName))
+					{
 						com.Parameters.Add("@FirstName", SqlDbType.NVarChar).Value = pFirstName;
-					}					
+					}
+
 					using (SqlDataReader reader = com.ExecuteReader())
 					{
 						Employee emp;
@@ -86,7 +87,7 @@ namespace EmployeesWebAPI.DAL
 							emp.FirstName = reader.GetString(1);
 							emp.LastName = reader.GetString(2);
 							emp.Gender = reader.GetString(3);
-							emp.Salary = reader.GetInt32(4);				
+							emp.Salary = reader.GetInt32(4);
 							employees.Add(emp);
 						}
 					}
@@ -108,6 +109,114 @@ namespace EmployeesWebAPI.DAL
 			return employees;
 		}
 
+		public int UpdateEmployee(Employee emp)
+		{
+			int result = 0;
+			try
+			{
+				using (con = new SqlConnection(conString))
+				{
+					con.Open();
+					com = new SqlCommand("sp_UpdateEmployee", con);
+					com.CommandType = CommandType.StoredProcedure;
+					if (emp == null)
+					{
+						log.WriteToFile("Object can not be null");
+					}
+					else
+					{
+						if (emp.ID > 0)
+						{
+							com.Parameters.Add("@ID", SqlDbType.Int).Value = emp.ID;
+						}
+						if (!String.IsNullOrEmpty(emp.FirstName))
+						{
+							com.Parameters.Add("@FirstName", SqlDbType.NVarChar).Value = emp.FirstName;
+						}
+						else
+						{
+							log.WriteToFile($"FirstName can not null");
+						}
+						if (!String.IsNullOrEmpty(emp.LastName))
+						{
+							com.Parameters.Add("@LastName", SqlDbType.NVarChar).Value = emp.LastName;
+						}
+						if (!String.IsNullOrEmpty(emp.Gender))
+						{
+							com.Parameters.Add("@Gender", SqlDbType.NVarChar).Value = emp.Gender;
+						}
+						if (emp.Salary > 0)
+						{
+							com.Parameters.Add("@Salary", SqlDbType.NVarChar).Value = emp.Salary;
+						}
+						result = com.ExecuteNonQuery();
+					}
+					con.Close();
+				}
+			}
+			catch (Exception ex)
+			{
+				log.WriteToFile(ex.Message);
+
+			}
+			finally
+			{
+				if (con.State == ConnectionState.Open)
+				{
+					con.Close();
+				}
+			}
+			return result;
+		}
+
+		public Employee GetEmployeeByID(int ID)
+		{
+			Employee emp = new Employee();
+			try
+			{
+				using (con = new SqlConnection(conString))
+				{
+					con.Open();
+					com = new SqlCommand("sp_GetEmployeeByID", con);
+					com.CommandType = CommandType.StoredProcedure;
+					if (ID > 0)
+					{
+						com.Parameters.Add("@ID", SqlDbType.Int).Value = ID;
+					}
+					else
+					{
+						log.WriteToFile($"{ID} not Valid");
+					}
+
+					using (SqlDataReader reader = com.ExecuteReader())
+					{
+						
+						while (reader.Read())
+						{							
+							emp.ID = reader.GetInt32(0);
+							emp.FirstName = reader.GetString(1);
+							emp.LastName = reader.GetString(2);
+							emp.Gender = reader.GetString(3);
+							emp.Salary = reader.GetInt32(4);							
+						}
+					}
+					con.Close();
+				}
+			}
+			catch (Exception ex)
+			{
+				log.WriteToFile(ex.Message);
+
+			}
+			finally
+			{
+				if (con.State == ConnectionState.Open)
+				{
+					con.Close();
+				}
+			}
+			return emp;
+		}
 
 		public int AddNewEmployee(Employee emp)
 		{
@@ -115,7 +224,7 @@ namespace EmployeesWebAPI.DAL
 			List<Employee> employees = new List<Employee>();
 			try
 			{
-				
+
 				using (con = new SqlConnection(conString))
 				{
 					con.Open();
@@ -124,6 +233,10 @@ namespace EmployeesWebAPI.DAL
 					if (!String.IsNullOrEmpty(emp.FirstName))
 					{
 						com.Parameters.Add("@FirstName", SqlDbType.NVarChar).Value = emp.FirstName;
+					}
+					else
+					{
+						log.WriteToFile($"FirstName can not Valid");
 					}
 					if (!String.IsNullOrEmpty(emp.LastName))
 					{
@@ -137,7 +250,7 @@ namespace EmployeesWebAPI.DAL
 					{
 						com.Parameters.Add("@Salary", SqlDbType.NVarChar).Value = emp.Salary;
 					}
-					result = com.ExecuteNonQuery();				
+					result = com.ExecuteNonQuery();
 					con.Close();
 				}
 			}
